@@ -53,16 +53,9 @@ class UserController extends Controller
             $em->flush();
 
 
-            $userFromDatabase = $em->getRepository('AppBundle:User')->createQueryBuilder('p')
-                ->where('p.id = :price')
-                ->setParameter('price', $user->getId())
-                ->getQuery();
-
-            $userFromDatabase2 = $userFromDatabase->getSingleResult();
-
 
             $redis = $this->get('app_redis');
-            $auth = $redis->registerUser($userFromDatabase2);
+            $auth = $redis->registerUser($user);
 
             $response = new Response(
                 'Content',
