@@ -13,3 +13,4 @@ temp/
 /var/sessions/
 /var/bootstrap.php.cache
 /var/SymfonyRequirements.php
+/app/config/parameters.yml
