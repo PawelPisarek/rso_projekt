@@ -24,8 +24,7 @@ class DefaultController extends Controller
         $redis = $this->get('app_redis');
         $redis->setToSet();
 
-        $user = new User('6','asd1','asd');
-        $redis->registerUser($user);
+
 
         $response = new Response(
             'Content',

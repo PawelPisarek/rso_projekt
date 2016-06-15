@@ -50,7 +50,19 @@ class UserController extends Controller
             $em->persist($user);
             $em->flush();
 
-            return $this->redirectToRoute('user_show', array('id' => $user->getId()));
+
+            $userFromDatabase = $em->getRepository('AppBundle:User')->createQueryBuilder('p')
+                ->where('p.id = :price')
+                ->setParameter('price', $user->getId())
+                ->getQuery();
+
+            $userFromDatabase2 = $userFromDatabase->getSingleResult();
+
+
+            $redis = $this->get('app_redis');
+            $auth = $redis->registerUser($userFromDatabase2);
+
+            return $this->redirectToRoute('user_show', array('id' => $user->getId(), 'auth' => $auth));
         }
 
         return $this->render('user/new.html.twig', array(
@@ -62,15 +74,16 @@ class UserController extends Controller
     /**
      * Finds and displays a User entity.
      *
-     * @Route("/{id}", name="user_show")
+     * @Route("/{id}/{auth}", name="user_show")
      * @Method("GET")
      */
-    public function showAction(User $user)
+    public function showAction(User $user, $auth = 'Tylko przy Rejestracji jest widoczny auth')
     {
         $deleteForm = $this->createDeleteForm($user);
 
         return $this->render('user/show.html.twig', array(
             'user' => $user,
+            'auth' => $auth,
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -134,7 +147,6 @@ class UserController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('user_delete', array('id' => $user->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

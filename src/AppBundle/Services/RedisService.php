@@ -40,12 +40,15 @@ class RedisService
         $user = new UserWithAuth($user->getId(), $user->getUsername(), $user->getPassword(), $this->authsecret());
 
         $this->redisClient->hset("users", $user->getUsername(), $user->getId());
+
+
         $this->redisClient->hmset("user:".$user->getId(),
             "username", $user->getUsername(),
             "password", $user->getPassword(),
             "auth", $user->getAuth());
 
         $this->redisClient->hset("auths", $user->getAuth(), $user->getId());
+        return $user->getAuth();
 
     }
 
