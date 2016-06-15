@@ -26,18 +26,6 @@ class DefaultController extends Controller
 
 
 
-        $response = new Response(
-            'Content',
-            Response::HTTP_OK,
-            array('content-type' => 'text/html')
-        );
-
-
-
-        $response->prepare($request);
-        $response->headers->setCookie(new Cookie('foo', '1'));
-        $response->send();
-
 
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),

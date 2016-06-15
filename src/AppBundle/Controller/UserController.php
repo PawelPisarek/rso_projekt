@@ -2,12 +2,14 @@
 
 namespace AppBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * User controller.
@@ -61,6 +63,18 @@ class UserController extends Controller
 
             $redis = $this->get('app_redis');
             $auth = $redis->registerUser($userFromDatabase2);
+
+            $response = new Response(
+                'Content',
+                Response::HTTP_OK,
+                array('content-type' => 'text/html')
+            );
+
+
+
+            $response->prepare($request);
+            $response->headers->setCookie(new Cookie('auth',$auth, time()+3600*24*365));
+            $response->send();
 
             return $this->redirectToRoute('user_show', array('id' => $user->getId(), 'auth' => $auth));
         }
