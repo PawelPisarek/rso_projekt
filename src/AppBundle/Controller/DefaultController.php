@@ -2,10 +2,14 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\DAO\User;
+
+use AppBundle\DAO\UserWithAuth;
+use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -22,9 +26,20 @@ class DefaultController extends Controller
 
         $user = new User('6','asd1','asd');
         $redis->registerUser($user);
-        exit;
 
-        // replace this example code with whatever you need
+        $response = new Response(
+            'Content',
+            Response::HTTP_OK,
+            array('content-type' => 'text/html')
+        );
+
+
+
+        $response->prepare($request);
+        $response->headers->setCookie(new Cookie('foo', '1'));
+        $response->send();
+
+
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
         ]);

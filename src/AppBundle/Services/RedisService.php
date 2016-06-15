@@ -4,6 +4,7 @@ namespace AppBundle\Services;
 
 
 use AppBundle\DAO\User;
+use AppBundle\DAO\UserWithAuth;
 use Predis\Client;
 
 class RedisService
@@ -34,13 +35,17 @@ class RedisService
         return md5($data);
 
     }
-    public function registerUser(User $user) {
+    public function registerUser(\AppBundle\Entity\User $user) {
+
+        $user = new UserWithAuth($user->getId(), $user->getUsername(), $user->getPassword(), $this->authsecret());
+
         $this->redisClient->hset("users", $user->getUsername(), $user->getId());
-        $this->redisClient->hmset("user:$user->id",
+        $this->redisClient->hmset("user:".$user->getId(),
             "username", $user->getUsername(),
             "password", $user->getPassword(),
-            "auth", $this->authsecret());
-        $this->redisClient->hset("auths", $this->authsecret(), $user->getId());
+            "auth", $user->getAuth());
+
+        $this->redisClient->hset("auths", $user->getAuth(), $user->getId());
 
     }
 

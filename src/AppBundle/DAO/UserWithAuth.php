@@ -9,14 +9,14 @@
 namespace AppBundle\DAO;
 
 
-class User
+class UserWithAuth
 {
 
     /**
      * @var int
      *
      */
-    public $id;
+    private $id;
 
     /**
      * @var string
@@ -28,6 +28,27 @@ class User
      * @var string
      */
     private $password;
+
+
+
+    private $auth;
+
+    /**
+     * UserWithAuth constructor.
+     * @param int $id
+     * @param string $username
+     * @param string $password
+     * @param $auth
+     */
+    public function __construct($id, $username, $password, $auth = 'brak')
+    {
+        $this->id = $id;
+        $this->username = $username;
+        $this->password = $password;
+        $this->auth = $auth;
+    }
+
+
 
     /**
      * @return int
@@ -77,19 +98,22 @@ class User
         $this->password = $password;
     }
 
+    /**
+     * @return string
+     */
+    public function getAuth()
+    {
+        return $this->auth;
+    }
 
     /**
-     * User constructor.
-     * @param int $id
-     * @param string $username
-     * @param string $password
+     * @param string $auth
      */
-    public function __construct($id, $username, $password)
+    public function setAuth($auth)
     {
-        $this->id = $id;
-        $this->username = $username;
-        $this->password = $password;
+        $this->auth = $auth;
     }
+
 
 
 }
