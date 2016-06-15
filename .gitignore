@@ -1,0 +1,15 @@
+# Created by .ignore support plugin (hsz.mobi)
+### ZendFramework template
+# Composer files
+composer.phar
+vendor/
+
+# Data
+temp/
+
+.idea/
+/var/*
+/var/logs/
+/var/sessions/
+/var/bootstrap.php.cache
+/var/SymfonyRequirements.php
