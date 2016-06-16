@@ -3,6 +3,8 @@
 {% block body %}
     <h1>Post</h1>
 
+    <a href="{{ path('homepage') }}">Wróć do swoich postów</a>
+
     <table>
         <tbody>
             <tr>
@@ -30,6 +32,7 @@
 
     <ul>
         <li>
+            <a href="{{ path('post_index') }}">Back to the list</a>
             <a href="{{ path('post_index') }}">Back to the list</a>
         </li>
         <li>

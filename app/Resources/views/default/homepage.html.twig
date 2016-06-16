@@ -24,7 +24,7 @@
                 {% endif %}
 
             </div>
-
+            {% if isLoggedIn %}
             <div id="status">
                 <p>
                     <svg id="icon-status" width="1792" height="1792" viewBox="0 0 1792 1792"
@@ -39,7 +39,7 @@
             </div>
 
             <div id="next">
-                {% if isLoggedIn %}
+
 
 
                     <h2>Stwórz posta</h2>
@@ -50,6 +50,9 @@
                     <input type="submit" value="Create"/>
                     {{ form_end(form) }}
 
+                        {{ render(controller('AppBundle:Post:showPostForUserCheckedByAdmin', { 'userId': user.id })) }}
+                        {{ render(controller('AppBundle:Post:showPostForUserNotCheckedByAdmin', { 'userId': user.id })) }}
+
                     <ul>
                         <li>
                             <a href="{{ path('post_index') }}">Back to the list</a>
@@ -59,9 +62,9 @@
 
 
                     </p>
-                {% endif %}
-            </div>
 
+            </div>
+            {% endif %}
 
         </div>
     </div>

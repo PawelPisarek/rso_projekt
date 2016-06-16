@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -134,7 +135,35 @@ class PostController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('post_delete', array('id' => $post->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
+
+
+    public function showPostForUserCheckedByAdminAction($userId)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $posts = $em->getRepository('AppBundle:Post')->findBy(array("user" => $userId, "checkedByAdmin" => true));
+
+        return $this->render('post/showPostForUser.html.twig', array(
+            'posts' => $posts,
+        ));
+
+    }
+
+    public function showPostForUserNotCheckedByAdminAction($userId)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $posts = $em->getRepository('AppBundle:Post')->findBy(array("user" => $userId, "checkedByAdmin" => false));
+
+        return $this->render('post/showPostForUser.html.twig', array(
+            'posts' => $posts,
+        ));
+
+    }
+
+
 }
