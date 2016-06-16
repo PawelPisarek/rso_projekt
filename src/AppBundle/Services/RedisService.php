@@ -73,4 +73,23 @@ class RedisService
         return $auth;
     }
 
+    public function getUserByAuth(UserWithAuth $user)
+    {
+
+        $userId = $this->redisClient->hget("auths", $user->getAuth());
+        $auth = $this->redisClient->hmget("user:" . $userId, "auth")[0];
+
+
+        if ($auth !== $user->getAuth())
+            throw new NotFoundResourceException('Nie ma takiego auth');
+
+        $user->setId($userId);
+        $user->setUsername($this->redisClient->hmget("user:" . $userId, "username")[0]);
+        $user->setPassword($this->redisClient->hmget("user:" . $userId, "password")[0]);
+
+
+
+        return $user;
+    }
+
 }

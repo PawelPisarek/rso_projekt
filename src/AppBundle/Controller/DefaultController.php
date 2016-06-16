@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 class DefaultController extends Controller
 {
@@ -24,6 +25,16 @@ class DefaultController extends Controller
         $redis = $this->get('app_redis');
         $redis->setToSet();
 
+
+        $user = new UserWithAuth('weź', 'id i user name', ' z auth', $request->cookies->get("auth"));
+        try {
+            $user = $redis->getUserByAuth($user);
+            var_dump($user);
+
+        } catch (NotFoundResourceException $e) {
+
+            var_dump($e->getMessage());
+        }
 
 
 
