@@ -33,6 +33,7 @@ class DefaultController extends Controller
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+                $user = $redis->getUserByAuth($user);
                 $em = $this->getDoctrine()->getManager();
                 $post->setUser($user->getId());
                 $em->persist($post);
