@@ -28,6 +28,11 @@ class DefaultController extends Controller
 
         try {
             $user = $redis->getUserByAuth($user);
+
+            if ("admin" == $user->getUsername()) {
+                return $this->redirectToRoute('admin');
+            }
+
             $isLoggedIn = true;
 
             $form->handleRequest($request);
