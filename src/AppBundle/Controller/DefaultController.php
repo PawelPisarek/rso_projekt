@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\DAO\UserWithAuth;
+use AppBundle\Entity\Post;
 use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,17 +20,28 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-
-        echo "redis";
-
         $redis = $this->get('app_redis');
-        $redis->setToSet();
-
-        $isLoggedIn = false;
         $user = new UserWithAuth('weź', 'id i user name', ' z auth', $request->cookies->get("auth"));
+        $isLoggedIn = false;
+        $post = new Post();
+        $form = $this->createForm('AppBundle\Form\PostType', $post);
+
         try {
             $user = $redis->getUserByAuth($user);
             $isLoggedIn = true;
+
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $post->setUser($user->getId());
+                $em->persist($post);
+                $em->flush();
+
+                return $this->redirectToRoute('post_show', array('id' => $post->getId()));
+            }
+
+
         } catch (NotFoundResourceException $e) {
 
 //            var_dump($e->getMessage());
@@ -38,7 +50,9 @@ class DefaultController extends Controller
 
         return $this->render('default/homepage.html.twig', [
             'user' => $user,
-            'isLoggedIn' => $isLoggedIn
+            'isLoggedIn' => $isLoggedIn,
+            'post' => $post,
+            'form' => $form->createView(),
         ]);
     }
 }

@@ -8,12 +8,12 @@
                 {% if isLoggedIn %}
 
                     <a href="{{ path('logout') }}">
-                     Wyloguj się
+                        Wyloguj się
                     </a>
                 {% else %}
 
                     <a href="{{ path('login') }}">
-                      Zaloguj się
+                        Zaloguj się
                     </a>
 
 
@@ -35,13 +35,29 @@
             </div>
 
             <div id="next">
-                <h2>What's next?</h2>
-                <p>
+                {% if isLoggedIn %}
 
-                    Read the documentation to learn
 
-                </p>
+                    <h2>Stwórz posta</h2>
+
+                    <p>
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <input type="submit" value="Create"/>
+                    {{ form_end(form) }}
+
+                    <ul>
+                        <li>
+                            <a href="{{ path('post_index') }}">Back to the list</a>
+                        </li>
+                    </ul>
+
+
+
+                    </p>
+                {% endif %}
             </div>
+
 
         </div>
     </div>

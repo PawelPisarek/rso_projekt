@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,10 +19,10 @@ class PostType extends AbstractType
             ->add('title')
             ->add('description')
             ->add('checkedByAdmin')
-            ->add('user')
-        ;
+            ->add('user', HiddenType::class, array(
+                'data' => 'abcdef',));
     }
-    
+
     /**
      * @param OptionsResolver $resolver
      */
