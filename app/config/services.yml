@@ -9,3 +9,5 @@ services:
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
     app_redis:
           class: AppBundle\Services\RedisService
+    rabbitmq.callback.service:
+          class: AppBundle\Services\RQService

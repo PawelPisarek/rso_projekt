@@ -7,6 +7,22 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    rabbitmq_connections:
+            default: { host: 'localhost', port: 5672, user: 'guest', password: 'guest', vhost: '/' }
+
+        # define producers
+    rabbitmq_producers:
+            sample:
+                connection:         default
+                exchange_options:   {name: 'exchange_name', type: direct, auto_delete: false, durable: true}
+
+        # define consumers
+    rabbitmq_consumers:
+            sample:
+                connection:         default
+                exchange_options:   {name: 'exchange_name', type: direct, auto_delete: false, durable: true}
+                queue_options:      {name: 'sample', auto_delete: false}
+                callback:           rabbitmq.callback.service
 
 framework:
     #esi:             ~
@@ -66,3 +82,9 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+old_sound_rabbit_mq:
+    connections: %rabbitmq_connections%
+    producers: %rabbitmq_producers%
+    consumers: %rabbitmq_consumers%
+
