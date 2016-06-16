@@ -13,7 +13,7 @@ use Symfony\Component\Translation\Exception\NotFoundResourceException;
 class LoginController extends Controller
 {
     /**
-     * @Route("/login")
+     * @Route("/login", name="login")
      */
     public function loginAction(Request $request)
     {
@@ -32,8 +32,9 @@ class LoginController extends Controller
                 $response->prepare($request);
                 $response->headers->setCookie(new Cookie('auth', $auth, time() + 3600 * 24 * 365));
                 $response->send();
+                return $this->redirectToRoute('homepage');
             } catch (NotFoundResourceException $e) {
-                var_dump($e->getMessage());
+//                var_dump($e->getMessage());
 
             }
 
@@ -45,12 +46,18 @@ class LoginController extends Controller
     }
 
     /**
-     * @Route("/logout")
+     * @Route("/logout", name="logout")
      */
-    public function logoutAction()
+    public function logoutAction(Request $request)
     {
-        return $this->render('AppBundle:Login:logout.html.twig', array(// ...
-        ));
+        $response = new Response();
+
+
+        $response->prepare($request);
+        $response->headers->clearCookie('auth');
+        $response->send();
+        return $this->redirectToRoute('homepage');
+
     }
 
 }

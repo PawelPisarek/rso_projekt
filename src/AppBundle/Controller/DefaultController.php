@@ -25,21 +25,20 @@ class DefaultController extends Controller
         $redis = $this->get('app_redis');
         $redis->setToSet();
 
-
+        $isLoggedIn = false;
         $user = new UserWithAuth('weź', 'id i user name', ' z auth', $request->cookies->get("auth"));
         try {
             $user = $redis->getUserByAuth($user);
-            var_dump($user);
-
+            $isLoggedIn = true;
         } catch (NotFoundResourceException $e) {
 
-            var_dump($e->getMessage());
+//            var_dump($e->getMessage());
         }
 
 
-
-        return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+        return $this->render('default/homepage.html.twig', [
+            'user' => $user,
+            'isLoggedIn' => $isLoggedIn
         ]);
     }
 }
