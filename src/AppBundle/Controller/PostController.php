@@ -148,6 +148,7 @@ class PostController extends Controller
 
         return $this->render('post/showPostForUser.html.twig', array(
             'posts' => $posts,
+            'checkedByAdmin' => true
         ));
 
     }
@@ -161,6 +162,7 @@ class PostController extends Controller
 
         return $this->render('post/showPostForUser.html.twig', array(
             'posts' => $posts,
+            'checkedByAdmin' => false
         ));
 
     }
