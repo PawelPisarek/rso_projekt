@@ -51,11 +51,28 @@ class RabbitMQProducerConsumerService
     {
 
         try {
-            return $this->consumer->consume(1);
+
+
+            ob_start();
+            $this->consumer->consume(1);
+            $message = ob_get_clean();
+
+            $pieces = explode("int(", $message);
+
+            $pieces = explode(")", $pieces[1]);
+            $idMessage = $pieces[0];
+
+            //nie jest możliwe dostanie się do tytułu wiadomości inaczej niż parsowanie takie jak id
+            // wynika to z tego, że trzeba wyedytować klasę RQService ale nie wiem jak
+
+            $postQueue = new PostQueue($idMessage, 'ten kod to żart ale id jest prawidłowe');
+            return $postQueue;
+
+
         } catch (AMQPTimeoutException $e) {
 //            var_dump($e->getMessage());
 
-            return (array('id' => 0, 'title' => 'Brak nowych wiadomości'));
+            return new PostQueue(0, 'Brak nowych wiadomości');
         }
 
     }

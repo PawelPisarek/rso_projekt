@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\DAO\PostQueue;
 use AppBundle\DAO\UserWithAuth;
 use AppBundle\Entity\Post;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -22,7 +23,7 @@ class AdminController extends Controller
         $user = new UserWithAuth('weź', 'id i user name', ' z auth', $request->cookies->get("auth"));
         $isLoggedIn = false;
         $post = new Post();
-
+        $postQueue = new PostQueue(0, 'Nie pobrano z koleiki');
 
         try {
             $user = $redis->getUserByAuth($user);
@@ -31,10 +32,7 @@ class AdminController extends Controller
             }
             $queue = $this->get('app_rabbitmq');
 
-            var_dump($queue->consume());
-
-
-
+            $postQueue = $queue->consume();
 
 
         } catch (NotFoundResourceException $e) {
@@ -47,6 +45,7 @@ class AdminController extends Controller
             'user' => $user,
             'isLoggedIn' => $isLoggedIn,
             'post' => $post,
+            'postQueue' => $postQueue
         ));
     }
 
