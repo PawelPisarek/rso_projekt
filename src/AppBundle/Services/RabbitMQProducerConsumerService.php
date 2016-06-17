@@ -9,10 +9,14 @@
 namespace AppBundle\Services;
 
 
+use AppBundle\DAO\PostQueue;
+use AppBundle\Entity\Post;
 use OldSound\RabbitMqBundle\RabbitMq\Consumer;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use OldSound\RabbitMqBundle\RabbitMq\Producer;
+use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Message\AMQPMessage;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class RabbitMQProducerConsumerService
 {
@@ -37,17 +41,22 @@ class RabbitMQProducerConsumerService
         $this->consumer = $consumer;
     }
 
-    public function publish()
+    public function publish(Post $post)
     {
-        $this->producer->publish(serialize(array('foo'=>'bar','_FOO'=>'_BAR')), 'sample');
+
+        $this->producer->publish(new PostQueue($post->getId(), $post->getTitle()), 'sample');
     }
 
     public function consume()
     {
-        return $this->consumer->consume(1);
+
+        try {
+            return $this->consumer->consume(1);
+        } catch (AMQPTimeoutException $e) {
+//            var_dump($e->getMessage());
+
+            return (array('id' => 0, 'title' => 'Brak nowych wiadomości'));
+        }
+
     }
-
-
-
-
 }

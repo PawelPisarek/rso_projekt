@@ -25,14 +25,8 @@ class DefaultController extends Controller
         $isLoggedIn = false;
         $post = new Post();
         $form = $this->createForm('AppBundle\Form\PostType', $post);
-
-
-
         $queue = $this->get('app_rabbitmq');
 
-        $queue->publish();
-
-        var_dump($queue->consume());
 
 
         try {
@@ -52,6 +46,7 @@ class DefaultController extends Controller
                 $post->setUser($user->getId());
                 $em->persist($post);
                 $em->flush();
+                $queue->publish($post);
 
                 return $this->redirectToRoute('post_show', array('id' => $post->getId()));
             }

@@ -23,6 +23,7 @@ parameters:
                 exchange_options:   {name: 'exchange_name', type: direct, auto_delete: false, durable: true}
                 queue_options:      {name: 'sample', auto_delete: false}
                 callback:           rabbitmq.callback.service
+                idle_timeout:     1
 
 framework:
     #esi:             ~

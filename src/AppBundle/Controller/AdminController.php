@@ -29,6 +29,12 @@ class AdminController extends Controller
             if ("admin" == $user->getUsername()) {
                 $isLoggedIn = true;
             }
+            $queue = $this->get('app_rabbitmq');
+
+            var_dump($queue->consume());
+
+
+
 
 
         } catch (NotFoundResourceException $e) {
