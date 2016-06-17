@@ -20,3 +20,11 @@ rso_projekt
  php bin/console rabbitmq:c sample --route="sample" <- wypisanie tego co jest w kolejece
  
  sudo rabbitmqctl stop_app <- gdy pobierzemy więcej wiadomości niż jest w kolejce
+ 
+ zarejestruj użytkownika 
+ 
+ username: admin 
+ 
+ password:admin 
+ 
+ aby mieć dostęp do przeglądania postów
