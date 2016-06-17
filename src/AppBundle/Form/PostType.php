@@ -18,7 +18,7 @@ class PostType extends AbstractType
         $builder
             ->add('title')
             ->add('description')
-            ->add('checkedByAdmin')
+            ->add('checkedByAdmin',HiddenType::class)
             ->add('user', HiddenType::class, array(
                 'data' => 'abcdef',));
     }
