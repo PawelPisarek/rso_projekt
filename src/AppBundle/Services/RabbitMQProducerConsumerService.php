@@ -17,6 +17,7 @@ use OldSound\RabbitMqBundle\RabbitMq\Producer;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Message\AMQPMessage;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 class RabbitMQProducerConsumerService
 {
@@ -71,8 +72,7 @@ class RabbitMQProducerConsumerService
 
         } catch (AMQPTimeoutException $e) {
 //            var_dump($e->getMessage());
-
-            return new PostQueue(0, 'Brak nowych wiadomości');
+            throw new NotFoundResourceException('Brak nowych wiadomości');
         }
 
     }

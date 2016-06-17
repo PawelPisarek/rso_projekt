@@ -23,7 +23,7 @@ class AdminController extends Controller
         $user = new UserWithAuth('weź', 'id i user name', ' z auth', $request->cookies->get("auth"));
         $isLoggedIn = false;
         $post = new Post();
-        $postQueue = new PostQueue(0, 'Nie pobrano z koleiki');
+        $postQueue = new PostQueue(0, 'Nie pobrano z koleiki, lub nie ma wiadomości');
 
         try {
             $user = $redis->getUserByAuth($user);
@@ -33,7 +33,9 @@ class AdminController extends Controller
             $queue = $this->get('app_rabbitmq');
 
             $postQueue = $queue->consume();
+            $em = $this->getDoctrine()->getManager();
 
+            $post = $em->getRepository('AppBundle:Post')->findById($postQueue->getId())[0];
 
         } catch (NotFoundResourceException $e) {
 
@@ -50,21 +52,27 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/accept")
+     * @Route("/accept/{id}",name="accept")
      */
-    public function acceptAction()
+    public function acceptAction($id)
     {
-        return $this->render('AppBundle:Admin:accept.html.twig', array(// ...
-        ));
+
+        $em = $this->getDoctrine()->getManager();
+        $post = $em->getRepository('AppBundle:Post')->findById($id)[0];
+        $post->setCheckedByAdmin(1);
+        $em->persist($post);
+        $em->flush();
+        return $this->redirectToRoute('admin');
+
     }
 
     /**
-     * @Route("/cancel")
+     * @Route("/cancel",name="cancel")
      */
     public function cancelAction()
     {
-        return $this->render('AppBundle:Admin:cancel.html.twig', array(// ...
-        ));
+        return $this->redirectToRoute('admin');
+
     }
 
 }
