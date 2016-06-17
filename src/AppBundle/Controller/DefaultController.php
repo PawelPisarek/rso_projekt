@@ -24,6 +24,7 @@ class DefaultController extends Controller
         $user = new UserWithAuth('weź', 'id i user name', ' z auth', $request->cookies->get("auth"));
         $isLoggedIn = false;
         $post = new Post();
+        $post->setCheckedByAdmin(false);
         $form = $this->createForm('AppBundle\Form\PostType', $post);
         $queue = $this->get('app_rabbitmq');
 

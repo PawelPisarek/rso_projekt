@@ -18,51 +18,51 @@
 
                     <br>
                     <a href="{{ path('user_new') }}">
-                        Zarejestruj się
+                       Zarejestruj się
                     </a>
 
                 {% endif %}
 
             </div>
             {% if isLoggedIn %}
-                <div id="status">
-                    <p>
-                        <svg id="icon-status" width="1792" height="1792" viewBox="0 0 1792 1792"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1671 566q0 40-28 68l-724 724-136 136q-28 28-68 28t-68-28l-136-136-362-362q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 295 656-657q28-28 68-28t68 28l136 136q28 28 28 68z"
-                                  fill="#759E1A"/>
-                        </svg>
+            <div id="status">
+                <p>
+                    <svg id="icon-status" width="1792" height="1792" viewBox="0 0 1792 1792"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1671 566q0 40-28 68l-724 724-136 136q-28 28-68 28t-68-28l-136-136-362-362q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 295 656-657q28-28 68-28t68 28l136 136q28 28 28 68z"
+                              fill="#759E1A"/>
+                    </svg>
 
-                        Jesteś zalogowany jako
-                        <code>{{ user.username }}</code>
-                    </p>
-                </div>
+                    Jesteś zalogowany jako
+                    <code>{{ user.username }}</code>
+                </p>
+            </div>
 
-                <div id="next">
+            <div id="next">
+
 
 
                     <h2>Stwórz posta</h2>
 
                     <p>
+                       
 
 
-                        {{ form_start(form) }}
-
-
-                        {{ form_row(form.title ) }}
-                        {{ form_row(form.description ) }}
-                        {#{{ form_row(form.checkedByAdmin ) }}#}
-                        <input type="submit" value="Create"/>
-
-                        {{ form_end(form, {'render_rest': false}) }}
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <input type="submit" value="Create"/>
+                    {{ form_end(form) }}
 
                         {{ render(controller('AppBundle:Post:showPostForUserCheckedByAdmin', { 'userId': user.id })) }}
                         {{ render(controller('AppBundle:Post:showPostForUserNotCheckedByAdmin', { 'userId': user.id })) }}
 
 
+
+
+
                     </p>
 
-                </div>
+            </div>
             {% endif %}
 
         </div>
