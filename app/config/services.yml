@@ -11,3 +11,7 @@ services:
           class: AppBundle\Services\RedisService
     rabbitmq.callback.service:
           class: AppBundle\Services\RQService
+
+    app_rabbitmq:
+          class:  AppBundle\Services\RabbitMQProducerConsumerService
+          arguments: ["@old_sound_rabbit_mq.sample_producer","@old_sound_rabbit_mq.sample_consumer"]

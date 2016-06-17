@@ -25,9 +25,15 @@ class DefaultController extends Controller
         $isLoggedIn = false;
         $post = new Post();
         $form = $this->createForm('AppBundle\Form\PostType', $post);
-        $producer = $this->get('old_sound_rabbit_mq.sample_producer');
 
-        $producer->publish(serialize(array('foo'=>'bar','_FOO'=>'_BAR')), 'sample');
+
+
+        $queue = $this->get('app_rabbitmq');
+
+        $queue->publish();
+
+        var_dump($queue->consume());
+
 
         try {
             $user = $redis->getUserByAuth($user);
