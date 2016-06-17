@@ -15,3 +15,6 @@ rso_projekt
  
  b) php bin/console d:s:c <- tworzy schemat bazy dancyh
  
+ http://localhost:15672 <-jakiś panel administracyjny rabitmq
+ php bin/console rabbitmq:conmer sample --route="sample" <- wypisanie tego co jest w kolejece
+ sudo rabbitmqctl stop_app <- gdy pobierzemy więcej wiadomości niż jest w kolejce
