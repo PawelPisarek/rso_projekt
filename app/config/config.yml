@@ -89,3 +89,10 @@ old_sound_rabbit_mq:
     producers: %rabbitmq_producers%
     consumers: %rabbitmq_consumers%
 
+lsw_memcache:
+    session:
+        pool: default
+    pools:
+        default:
+            servers:
+              - { host: localhost, tcp_port: 11211 }

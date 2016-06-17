@@ -144,7 +144,15 @@ class PostController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $posts = $em->getRepository('AppBundle:Post')->findBy(array("user" => $userId, "checkedByAdmin" => true));
+
+        if ($this->get('memcache.default')->get('checkedByAdminTrue')) {
+            $posts = unserialize($this->get('memcache.default')->get('checkedByAdminTrue'));
+
+        } else {
+            $posts = $em->getRepository('AppBundle:Post')->findBy(array("user" => $userId, "checkedByAdmin" => true));
+            $this->get('memcache.default')->set('checkedByAdminTrue', serialize($posts), 0, 10);
+        }
+
 
         return $this->render('post/showPostForUser.html.twig', array(
             'posts' => $posts,
@@ -156,9 +164,15 @@ class PostController extends Controller
     public function showPostForUserNotCheckedByAdminAction($userId)
     {
 
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();;
 
-        $posts = $em->getRepository('AppBundle:Post')->findBy(array("user" => $userId, "checkedByAdmin" => false));
+        if ($this->get('memcache.default')->get('checkedByAdminFalse')) {
+            $posts = unserialize($this->get('memcache.default')->get('checkedByAdminFalse'));
+
+        } else {
+            $posts = $em->getRepository('AppBundle:Post')->findBy(array("user" => $userId, "checkedByAdmin" => false));
+            $this->get('memcache.default')->set('checkedByAdminFalse', serialize($posts), 0, 10);
+        }
 
         return $this->render('post/showPostForUser.html.twig', array(
             'posts' => $posts,
